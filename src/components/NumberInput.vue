@@ -1,5 +1,5 @@
 <template>
-  <!-- capped min and max interation on input buttons -->
+  <!-- Capped min and max interation on input buttons -->
   <div id="number-input-container">
         <input type="number" id="number-input" v-model="changedLimit" @change="onChangeHandler" :min="0" :max="10000" />
   </div>
