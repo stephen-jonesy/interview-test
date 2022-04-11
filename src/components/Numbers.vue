@@ -1,65 +1,57 @@
 <template>
-  <div>
-    <div class="number" :id="'number-'+number" v-for="number in n()" :key="number" @mouseover="hov(number)" @mouseout="reset">
-      {{number}}
-    </div>
+  <div id="numbers-container">
+  <div v-for="number in numbers" :key="number.id" :class="[number.active ? 'number active' : 'number']"  @mouseover="hov(number.id)" @mouseout="hovout()" :id="`number-${number.id}`" > 
+        {{number.id}}
   </div>
+  </div>
+
 </template>
 
-<script>
+<script >
 export default {
-  data()
-  {
-    return {
-      limit: this.$parent.limit,
-      numbers: []
-    }
-  },
-  watch: {
-    ['$parent.limit'](newLimit)
-    {
-      this.limit = newLimit;
-    }
-  },
-  methods: {
-    n()
-    {
-      let numbers = [];
-      for(var i = 0; i < this.limit; i++)
-      {
-        numbers = [...numbers, i];
-      }
-      return numbers.sort(() => Math.random() - 0.5);
-    },
+    name: 'Numbers',
+    props: [
+        "numbers"
+    ],
+    emits: ["reset", "divisors"],
+    
+    methods: {
     hov(number)
     {
-      const nums = document.querySelectorAll('.number');
+        const numbers = this.numbers;
+        let divisors = []
 
-      for(let i = 0; i < nums.length; i++)
-      {
-        const num = nums[i].textContent.trim();
-        if(number % num === 0)
-        {
-          nums[i].classList.add('active')
-          console.log('divisor', num)
-        }
-      }
+        numbers.forEach(num => {
+            if(number % num.id === 0)
+            {
+                divisors.push(num.id);
+                
+            }
+            
+        });
+
+        this.$emit('divisors', divisors)
+
     },
-    reset()
+    hovout()
     {
-      const nums = document.querySelectorAll('.number');
-      nums.forEach(num => num.classList.remove('active'))
+        this.$emit('reset')
+
+    },
+    eventHandler(event) {
+        console.log(event.target.id)
     }
-  }
+
+    }
 }
 </script>
 
-<style scoped>
-	.number {
-		display: inline-block;
-		padding: 5px;
-		background-color: lightgrey;
-		margin: 5px;
+<style>
+    .number {
+        display: inline-block;
+        padding: 5px;
+        background-color: lightgrey;
+        margin: 5px;
 	}
 
 	.active {
