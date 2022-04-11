@@ -1,4 +1,6 @@
 <template>
+  <!-- highlighted class is now toggled on ternary operator and id is now iterated through with ES6+ syntax.
+   -->
   <div id="numbers-container">
   <div v-for="number in numbers" :key="number.id" :class="[number.active ? 'number active' : 'number']"  @mouseover="hov(number.id)" @mouseout="hovout()" :id="`number-${number.id}`" > 
         {{number.id}}
@@ -10,10 +12,15 @@
 <script >
 export default {
     name: 'Numbers',
+    // number is now passed down as a prop
+
     props: [
         "numbers"
     ],
+    
     emits: ["reset", "divisors"],
+
+    //event handlers now emit logic back to the parent component
     
     methods: {
     hov(number)
@@ -38,9 +45,7 @@ export default {
         this.$emit('reset')
 
     },
-    eventHandler(event) {
-        console.log(event.target.id)
-    }
+
 
     }
 }
